@@ -1,0 +1,8 @@
+.vscode
+.idea
+.DS_Store
+/target
+*.spkg
+node_modules
+yarn-error.log
+replay.log

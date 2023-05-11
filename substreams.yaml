@@ -1,0 +1,73 @@
+specVersion: v0.1.0
+package:
+  name: "grt_substreams"
+  version: v0.1.0
+
+protobuf:
+  files:
+    - erc20.proto
+  importPaths:
+    - ./proto
+
+imports:
+  entity: https://github.com/streamingfast/substreams-entity-change/releases/download/v1.1.0/substreams-entity-change-v1.1.0.spkg
+
+binaries:
+  default:
+    type: wasm/rust-v1
+    file: ./target/wasm32-unknown-unknown/release/substreams.wasm
+
+modules:
+  - name: map_transfers
+    kind: map
+    initialBlock: 11446769
+    inputs:
+      - source: sf.ethereum.type.v2.Block
+    output:
+      type: proto:eth.erc20.v1.Transfers
+
+  - name: store_balances
+    kind: store
+    initialBlock: 11446769
+    valueType: bigint
+    updatePolicy: add
+    inputs:
+      - map: map_transfers
+
+  - name: store_total_supply
+    kind: store
+    initialBlock: 11446769
+    valueType: bigint
+    updatePolicy: add
+    inputs:
+      - map: map_transfers
+
+  - name: map_accounts
+    kind: map
+    initialBlock: 11446769
+    inputs:
+      - store: store_balances
+        mode: deltas
+    output:
+      type: proto:eth.erc20.v1.Accounts
+
+  - name: map_block_total_supply_change
+    kind: map
+    initialBlock: 11446769
+    inputs:
+      - store: store_total_supply
+    output:
+      type: proto:eth.erc20.v1.BlockTotalSupplyChange
+
+  - name: graph_out
+    kind: map
+    initialBlock: 11446769
+    inputs:
+      - map: map_transfers
+      - store: store_balances
+        mode: deltas
+      - store: store_total_supply
+        mode: deltas
+    output:
+      type: proto:sf.substreams.entity.v1.EntityChanges
+

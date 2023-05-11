@@ -1,0 +1,15 @@
+specVersion: 0.0.4
+description: GRT Subgraph (powered by StreamingFast Substreams)
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: substreams
+    name: grt_substreams_subgraph
+    network: mainnet
+    source:
+      package:
+        moduleName: graph_out
+        file: substreams.spkg
+    mapping:
+      kind: substreams/graph-entities
+      apiVersion: 0.0.6

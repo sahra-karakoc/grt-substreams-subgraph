@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package eth.erc20.v1;
+
+message Transfers {
+  repeated Transfer transfers = 1;
+}
+
+message Transfer {
+    string id = 1;
+    string from = 2;
+    string to = 3;
+    string value = 4;
+    uint64 ordinal = 5;
+}
+  
+message Accounts {
+  repeated Account accounts = 1;
+}
+
+message Account {
+    string id = 1;
+    string balance = 2;
+}
+  
+message BlockTotalSupplyChange {
+    string block_total_supply_change = 1;
+}

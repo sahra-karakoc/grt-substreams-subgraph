@@ -1,0 +1,16 @@
+type GRT @entity {
+    id: ID!
+    totalSupply: BigInt!
+}
+
+type Transfer @entity {
+    id: ID!
+    to: String!
+    from: String!
+    value: BigInt!
+}
+
+type Account @entity {
+    id: ID! 
+    balance: BigInt!
+}
