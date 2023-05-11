@@ -1,72 +1,41 @@
-# Graph Network Subgraph fed by Substreams
+# GRT Subgraph fed by Substreams
 
-Substreams based Graph Network subgraph and substreams. 
+Substreams based GRT subgraph and substreams. 
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Introduction 
 
-This project is a [subgraph](https://thegraph.com/docs/en/developing/creating-a-subgraph/) fed by [substreams](https://substreams.streamingfast.io/) that allows you to obtain data for The Graph Network. 
+This project is a [subgraph](https://thegraph.com/docs/en/developing/creating-a-subgraph/) fed by [substreams](https://substreams.streamingfast.io/) that allows you to obtain data for The Graph's token, GRT. 
 
 ## Features 
 
 ### Available Data 
 
 This subgraph makes available the following data:
-- Total supply, total mints and burns of GRT, 
+- Total supply of GRT, 
 - GRT balances of addresses
-- In-protocol balances like indexer, delegator and curator stakes 
 
 ### Substreams Module Graph
 
 Here is the graph of the modules of the substreams: 
 
 ```mermaid
-graph LR;
-  map_storage_changes[map: map_storage_changes]
-  sf.ethereum.type.v2.Block[source: sf.ethereum.type.v2.Block] --> map_storage_changes
-  map_events[map: map_events]
-  sf.ethereum.type.v2.Block[source: sf.ethereum.type.v2.Block] --> map_events
-  store_grt_balances[store: store_grt_balances]
-  map_events --> store_grt_balances
-  store_grt_global[store: store_grt_global]
-  map_events --> store_grt_global
-  store_staked_tokens[store: store_staked_tokens]
-  map_storage_changes --> store_staked_tokens
-  store_graph_account_indexer[store: store_graph_account_indexer]
-  map_storage_changes --> store_graph_account_indexer
-  store_graph_account_delegator[store: store_graph_account_delegator]
-  map_events --> store_graph_account_delegator
-  store_graph_account_curator[store: store_graph_account_curator]
-  map_events --> store_graph_account_curator
-  store_cumulative_delegated_stakes[store: store_cumulative_delegated_stakes]
-  map_events --> store_cumulative_delegated_stakes
-  store_cumulative_delegator_stakes[store: store_cumulative_delegator_stakes]
-  map_events --> store_cumulative_delegator_stakes
-  store_total_delegated_stakes[store: store_total_delegated_stakes]
-  map_storage_changes --> store_total_delegated_stakes
-  store_delegation_parameters[store: store_delegation_parameters]
-  map_events --> store_delegation_parameters
-  store_total_signalled[store: store_total_signalled]
-  map_storage_changes --> store_total_signalled
-  store_cumulative_curator_signalled[store: store_cumulative_curator_signalled]
-  map_events --> store_cumulative_curator_signalled
-  store_cumulative_curator_burned[store: store_cumulative_curator_burned]
-  map_events --> store_cumulative_curator_burned
-  graph_out[map: graph_out]
-  store_grt_global -- deltas --> graph_out
-  store_grt_balances -- deltas --> graph_out
-  store_graph_account_indexer -- deltas --> graph_out
-  store_graph_account_delegator -- deltas --> graph_out
-  store_graph_account_curator -- deltas --> graph_out
-  map_storage_changes --> graph_out
-  store_staked_tokens -- deltas --> graph_out
-  store_cumulative_delegated_stakes -- deltas --> graph_out
-  store_cumulative_delegator_stakes -- deltas --> graph_out
-  store_total_delegated_stakes -- deltas --> graph_out
-  store_cumulative_curator_signalled -- deltas --> graph_out
-  store_cumulative_curator_burned -- deltas --> graph_out
-  store_total_signalled -- deltas --> graph_out
+graph TD;
+  map_transfers[map: map_transfers];
+  sf.ethereum.type.v2.Block[source: sf.ethereum.type.v2.Block] --> map_transfers;
+  store_balances[store: store_balances];
+  map_transfers --> store_balances;
+  store_total_supply[store: store_total_supply];
+  map_transfers --> store_total_supply;
+  map_accounts[map: map_accounts];
+  store_balances -- deltas --> map_accounts;
+  map_block_total_supply_change[map: map_block_total_supply_change];
+  store_total_supply --> map_block_total_supply_change;
+  graph_out[map: graph_out];
+  map_transfers --> graph_out;
+  store_balances -- deltas --> graph_out;
+  store_total_supply -- deltas --> graph_out;
 ```
 
 
@@ -77,7 +46,7 @@ To build and run the substream,
 2. [Get authentication](https://substreams.streamingfast.io/reference-and-specs/authentication).
 3. Clone this repo
 ```console
-git clone https://github.com/graphops/graph-network-substreams.git
+git clone https://github.com/sahra-karakoc/grt-substreams-subgraph.git
 ```
 4. Code gen with 
 ```console
